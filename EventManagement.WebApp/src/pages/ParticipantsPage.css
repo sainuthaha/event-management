@@ -1,0 +1,40 @@
+.participants-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.participants-page h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: red;
+}
+
+.participants-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.participant-card {
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    color: red;
+    display: flex;
+    justify-content: space-between;
+}
+
+.participant-info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.participant-info h3,
+.participant-info p {
+    flex: 1;
+    margin: 0 10px;
+    text-align: center;
+}

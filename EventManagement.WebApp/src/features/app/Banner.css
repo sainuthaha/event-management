@@ -1,0 +1,41 @@
+.banner {
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.banner-top-row {
+    background-color: gainsboro; /* Dark grey background */
+    height: 40px;
+}
+
+.banner-bottom-row {
+    background-color: #ffffff; /* White background */
+    color: red; /* Red text color */
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.banner-bottom-row h2 {
+    margin: 0;
+    font-size: 2em;
+}
+
+.banner-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #ffffff; /* White background color */
+    color: #333333; /* Dark grey text color */
+    border: 2px solid #ff0000; /* Red border color */
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.banner-button:hover {
+    background-color: #ff0000; /* Red background color on hover */
+    color: white; /* White text color on hover */
+}
