@@ -33,7 +33,7 @@
 - Register for events.
 - Manage user profile and registrations.
 
-![alt text](<Screenshot 2025-02-04 at 15.34.23.png>)
+![alt text](image.png)
 
 # Authorization & Authentication
 
