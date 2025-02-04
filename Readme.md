@@ -7,6 +7,7 @@
 - The Event Management API is a RESTful web service for managing events and registrations.
 - Provides endpoints for creating, updating, retrieving, and deleting events.
 - Manages event registrations.
+- Stores data to Azure sql tables.
 
 ### Features
 
@@ -59,3 +60,27 @@
  * It includes a series of unit tests, to ensure that all components
  * of the application work as expected. The tests are written using a testing framework such as MsTest, and they cover various scenarios including edge cases and error conditions.
  
+
+## Interaction Flow Diagram
+
+```mermaid
+graph TD
+    A[User] -->|Login| B[React Web App]
+    B -->|Redirect to| C[Azure AD]
+    C -->|Authenticate| B
+    B -->|JWT Token| D[Event Management API]
+    D -->|Validate Token| C
+    D -->|Access Data| E[SQL Database]
+    E -->|Return Data| D
+    D -->|Response| B
+    B -->|Display Data| A
+```
+
+### Explanation
+
+- **User**: Initiates the process by logging into the React Web App.
+- **React Web App**: Redirects the user to Azure AD for authentication.
+- **Azure AD**: Authenticates the user and returns a JWT token to the React Web App.
+- **Event Management API**: Receives the JWT token from the React Web App, validates it with Azure AD, and accesses the SQL Database to retrieve or store data.
+- **SQL Database**: Stores and returns the requested data to the Event Management API.
+- **React Web App**: Displays the data to the user.
