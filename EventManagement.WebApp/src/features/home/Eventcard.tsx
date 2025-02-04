@@ -24,9 +24,11 @@ export const EventCard: React.FC<EventCardProps> = ({ event, buttonText, onButto
                 <button
                     className="register-button"
                     onClick={() => onButtonClick(event)}
-                    disabled={buttonText === 'Register' && isSoldOut}
+                    disabled={buttonText === 'Register' && (isSoldOut || new Date(event.startTime) < new Date())}
                 >
-                    {buttonText === 'Register' && isSoldOut ? 'No tickets available' : buttonText}
+                    {buttonText === 'Register' && isSoldOut ? 'No tickets available' : 
+                     buttonText === 'Register' && new Date(event.startTime) < new Date() ? 'Past Event' : 
+                     buttonText}
                 </button>
             </div>
         </div>
