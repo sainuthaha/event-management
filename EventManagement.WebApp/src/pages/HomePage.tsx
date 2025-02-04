@@ -68,7 +68,7 @@ export const HomePage: React.FC = () => {
     };
     return (
         <>
-        <Banner title="Event Hub" buttonText="Admin Login" buttonLink={Url.EventManagement} />
+        <Banner title="Event Hub" buttonText="Event Manager Login" buttonLink={Url.EventManagement} />
         <div className="home-page">
             <div className="event-cards">
                 {events.map((event: Event) => (
