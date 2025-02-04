@@ -3,6 +3,7 @@ using EventManagement.Api.Interfaces;
 using EventManagement.Api.Models;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using System;
 
 namespace EventManagement.Api.Controllers
 {
@@ -21,23 +22,43 @@ namespace EventManagement.Api.Controllers
         [Route("registrations")]
         public async Task<IActionResult> RegisterForEvent([FromBody] Registration reg)
         {
-            await registrationService.RegisterEventAsync(reg);
-            return Ok();
+            try
+            {
+                await registrationService.RegisterEventAsync(reg);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
-
 
         [HttpGet("events/{eventId}/registrations")]
         public async Task<IActionResult> GetRegistrationsForEvent(Guid eventId)
         {
-            var registrations = await registrationService.GetRegistrationsForEventAsync(eventId);
-            return Ok(registrations);
+            try
+            {
+                var registrations = await registrationService.GetRegistrationsForEventAsync(eventId);
+                return Ok(registrations);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("registrations/{email}")]
         public async Task<IActionResult> GetRegistrationsByEmail(string email)
         {
-            var registrations = await registrationService.GetRegistrationsByEmailAsync(email);
-            return Ok(registrations);
+            try
+            {
+                var registrations = await registrationService.GetRegistrationsByEmailAsync(email);
+                return Ok(registrations);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }

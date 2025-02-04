@@ -323,6 +323,7 @@ export class Event implements IEvent {
     registrations?: Registration[] | undefined;
     availableTickets!: number;
     startTime!: Date;
+    createdBy?: string | undefined;
 
     constructor(data?: IEvent) {
         if (data) {
@@ -345,6 +346,7 @@ export class Event implements IEvent {
                     this.registrations!.push(Registration.fromJS(item));
             }
             this.availableTickets = _data["availableTickets"];
+            this.createdBy = _data["email"];
             this.startTime = _data["startTime"] ? new Date(_data["startTime"].toString()) : <any>undefined;
         }
     }
@@ -368,6 +370,7 @@ export class Event implements IEvent {
                 data["registrations"].push(item.toJSON());
         }
         data["availableTickets"] = this.availableTickets;
+        data["createdBy"] = this.createdBy;
         data["startTime"] = this.startTime ? this.startTime.toISOString() : <any>undefined;
         return data;
     }
@@ -381,6 +384,7 @@ export interface IEvent {
     registrations?: Registration[] | undefined;
     availableTickets: number;
     startTime: Date;
+    createdBy?: string;
 }
 
 export class LoginModel implements ILoginModel {

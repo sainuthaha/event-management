@@ -1,8 +1,9 @@
+ 
 import React, { useState, useEffect,  } from 'react';
 import { Url } from '../config/urls';
 import { Banner } from '../features/app/Banner';
 import { Event } from '../config/models';
-import { getEvents, post } from '../common/httpClient';
+import { get, post } from '../common/httpClient';
 import { useNavigate } from 'react-router-dom';
 import './EventManagement.css'; // Import the CSS file for styling
 import { CreateEventModal } from '../features/eventmanagement/CreateEventModel';
@@ -20,12 +21,14 @@ export const EventManagement: React.FC = () => {
             location: '',
             availableTickets: 0,
             startTime: new Date(),
+            createdBy: sessionStorage.getItem('userEmail') || ''
         })
     );
 
     const fetchEvents = async () => {
         try {
-            const data = await getEvents();
+            const email = sessionStorage.getItem('userEmail');
+            const data = await get(`/events/created/${email}`); 
             const eventObjects = data.map((eventData: Event) => Event.fromJS(eventData));
             setEvents(eventObjects);
         } catch (error) {
@@ -38,13 +41,18 @@ export const EventManagement: React.FC = () => {
     }, []);
 
     
+    const handleViewParticipants = (event: Event) => {
+        const token = sessionStorage.getItem('msalToken');
+        if (!token) {
+            console.log('Token expired or not found, redirecting to login...');
+            navigate('/login');
+            return;
+        }
         
-        const handleViewParticipants = (event: Event) => {
-            setSelectedEvent(event);
-            console.log('View participants for event:', event);
-            navigate(`/events/${event.id}/registrations`, { state: { event } });
-        };
-      
+        setSelectedEvent(event);
+        console.log('View participants for event:', event);
+        navigate(`/events/${event.id}/registrations`, { state: { event } });
+    };
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -79,7 +87,13 @@ export const EventManagement: React.FC = () => {
             return;
         }
         try {
-            const response = await post('/events', { arg: newEvent });
+            const token = sessionStorage.getItem('msalToken');
+
+            const response = await post('/events', { arg: newEvent }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
             console.log('Event creation successful:', response.data);
             setEvents((prevEvents) => [...prevEvents]);
             await fetchEvents();

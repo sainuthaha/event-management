@@ -38,15 +38,19 @@ export async function put(url: string, { arg }: { arg: any }, headers = { }) {
 
 export async function post(url: string, { arg }: { arg: any }, headers = { }) {
    console.log('post', arg);
-    return await thenCatch(axiosInstance.post(url, arg, updateAuthToken(headers)));
+   console.log('post', headers);
+    return await thenCatch(axiosInstance.post(url, arg, headers));
 }
 
 function updateAuthToken(headers: any) {
-  return {
+  const updatedheaders = {
     headers: {
     ...headers,
     },
   };
+
+  console.log('updateAuthToken', updatedheaders);
+  return updatedheaders;
 }
 
 function baseUrl()

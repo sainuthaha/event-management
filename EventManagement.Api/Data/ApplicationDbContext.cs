@@ -28,6 +28,7 @@ namespace EventManagement.Api.Data
                 entity.Property(e => e.Description).IsRequired();
                 entity.Property(e => e.Location).IsRequired();
                 entity.Property(e => e.StartTime).IsRequired();
+                entity.Property(e => e.CreatedBy).IsRequired();
             });
 
             modelBuilder.Entity<Registration>(entity =>

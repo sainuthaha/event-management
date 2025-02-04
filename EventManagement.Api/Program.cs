@@ -10,6 +10,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 // Add services to the container.
 builder.Services.AddAzureSqlDbContext(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
@@ -18,24 +19,29 @@ builder.Services.AddScoped<IEventRepository, EventRepository>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationService>();
 builder.Services.AddScoped<IRegistrationRepository, RegistrationRepository>();
-builder.Services.AddScoped<IUserService, UserService>();
 
-// Configure JWT Bearer authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        options.Authority = $"https://login.microsoftonline.com/{builder.Configuration["AzureAd:TenantId"]}/v2.0";
+        options.Audience = "api://26df75cb-7649-4d76-84d5-cda71f6fa93e"; // Match the aud claim in the token
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
+            ValidIssuer = $"https://sts.windows.net/{builder.Configuration["AzureAd:TenantId"]}/",
             ValidateAudience = true,
+            ValidAudience = "api://26df75cb-7649-4d76-84d5-cda71f6fa93e", // Match the aud claim in the token
             ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+            IssuerSigningKeyResolver = (token, securityToken, kid, parameters) =>
+            {
+                // Retrieve the signing keys from Azure AD
+                var discoveryDocument = new HttpClient().GetStringAsync($"{builder.Configuration["AzureAd:Instance"]}{builder.Configuration["AzureAd:TenantId"]}/.well-known/openid-configuration").Result;
+                var keys = new JsonWebKeySet(discoveryDocument).GetSigningKeys();
+                return keys;
+            }
         };
     });
-
+    
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));

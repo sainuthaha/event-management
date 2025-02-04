@@ -40,12 +40,19 @@ namespace EventManagement.Api.Repository
                 eventItem.Description = updatedEvent.Description;
                 eventItem.Location = updatedEvent.Location;
                 eventItem.StartTime = updatedEvent.StartTime;
-                // Update other properties as needed
+                eventItem.AvailableTickets = updatedEvent.AvailableTickets; 
+                eventItem.CreatedBy = updatedEvent.CreatedBy;
 
                 await _context.SaveChangesAsync();
                 return eventItem;
             }
             return null;
+        }
+
+
+        public async Task<IEnumerable<Event>> GetEventsByCreator(string email)
+        {
+           return await _context.Events.Where(e => e.CreatedBy == email).ToListAsync();
         }
     }
 }

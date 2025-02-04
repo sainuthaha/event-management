@@ -11,5 +11,6 @@ namespace EventManagement.Api.Interfaces
         Task<Event> GetEventByIdAsync(Guid eventId);
         Task<Event> CreateEventAsync(Event newEvent);
         Task<Event> UpdateEventAsync(Event updatedEvent);
+        Task<IEnumerable<Event>> GetEventsByCreator(string email);
     }
 }

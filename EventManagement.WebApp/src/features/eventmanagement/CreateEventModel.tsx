@@ -32,8 +32,7 @@ export const CreateEventModal: React.FC<CreateEventModalProps> = ({ isOpen, onCl
                     </label>
                     <label>
                         Start Time:
-                        <input type="datetime-local" name="startTime" value={new Date().toISOString().slice(0, 16)} onChange={handleChange} required />
-                    
+                        <input type="datetime-local" name="startTime" value={event.startTime.toISOString().slice(0, 16)} onChange={handleChange} required min={new Date().toISOString().slice(0, 16)} />
                     </label>
                     <label>
                         Available Tickets:

@@ -115,3 +115,4 @@
 /Users/fadilmuhammed/Desktop/Codebase/EventManagement/EventManagement.Api/obj/Debug/net8.0/EventManagement.Api.pdb
 /Users/fadilmuhammed/Desktop/Codebase/EventManagement/EventManagement.Api/obj/Debug/net8.0/EventManagement.Api.genruntimeconfig.cache
 /Users/fadilmuhammed/Desktop/Codebase/EventManagement/EventManagement.Api/obj/Debug/net8.0/ref/EventManagement.Api.dll
+/Users/fadilmuhammed/Desktop/Codebase/EventManagement/EventManagement.Api/obj/Debug/net8.0/EventManagement.Api.sourcelink.json

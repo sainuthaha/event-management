@@ -17,6 +17,11 @@ namespace EventManagement.Api.Services
             return await eventRepository.GetAllEventsAsync();
         }
 
+        public async Task<IEnumerable<Event>> GetEventsByCreator(string email)
+        {
+            return await eventRepository.GetEventsByCreator(email);
+        }
+
         public async Task<Event> GetEventByIdAsync(Guid eventId)
         {
             var eventItem = await eventRepository.GetEventByIdAsync(eventId);

@@ -20,5 +20,7 @@ namespace EventManagement.Api.Models
         [Required]
         public required int AvailableTickets { get; set; }
         public required DateTime StartTime { get; set; }
+
+        public required string CreatedBy { get; set; }
     }
 }

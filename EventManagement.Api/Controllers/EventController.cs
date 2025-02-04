@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.Logging;
 
 namespace EventManagement.Api.Controllers
 {
@@ -21,44 +22,90 @@ namespace EventManagement.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateEvent([FromBody] Event newEvent)
         {
-            var updatedEvent = await eventService.CreateEventAsync(newEvent);
-            return CreatedAtAction(nameof(GetEventById), new { id = updatedEvent.Id }, updatedEvent );
+            try
+            {
+                var createdEvent = await eventService.CreateEventAsync(newEvent);
+                return CreatedAtAction(nameof(GetEventById), new { id = createdEvent.Id }, createdEvent);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] Event updatedEvent)
         {
-            var existingEvent = await eventService.GetEventByIdAsync(id);
-            if (existingEvent == null)
+            try
             {
-                return NotFound();
-            }
+                var existingEvent = await eventService.GetEventByIdAsync(id);
+                if (existingEvent == null)
+                {
+                    return NotFound();
+                }
 
-            updatedEvent.Id = id;
-            await eventService.UpdateEventAsync(updatedEvent);
-            return Ok(updatedEvent);
+                updatedEvent.Id = id;
+                await eventService.UpdateEventAsync(updatedEvent);
+                return Ok(updatedEvent);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllEvents()
         {
-            var events = await eventService.GetAllEventsAsync();
-            return Ok(events);
+            try
+            {
+                var events = await eventService.GetAllEventsAsync();
+                return Ok(events);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetEventById(Guid id)
         {
-            var eventItem = await eventService.GetEventByIdAsync(id);
-            if (eventItem == null)
+            try
             {
-                return NotFound();
+                var eventItem = await eventService.GetEventByIdAsync(id);
+                if (eventItem == null)
+                {
+                    return NotFound();
+                }
+                return Ok(eventItem);
             }
-            return Ok(eventItem);
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
+        [HttpGet("created/{email}")]
+        public async Task<IActionResult> GetEventsByCreator(string email)
+        {
+            try
+            {
+                var events = await eventService.GetEventsByCreator(email);
+                if (events == null || !events.Any())
+                {
+                    return NotFound();
+                }
+                return Ok(events);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }
